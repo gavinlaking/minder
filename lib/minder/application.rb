@@ -1,9 +1,17 @@
 require 'minder/config'
 require 'minder/pomodoro/pomodoro_runner'
 require 'minder/tasks/task_manager'
-require 'minder/cli/scene'
 
-require 'curses'
+require 'ostruct'
+
+require 'minder/cli/setup'
+require 'minder/cli/scene'
+require 'minder/cli/views/help_frame'
+require 'minder/cli/views/search_frame'
+require 'minder/cli/views/filter_frame'
+require 'minder/cli/views/pomodoro_frame'
+require 'minder/cli/views/tasks_frame'
+require 'minder/cli/views/quick_add_frame'
 
 module Minder
   class Application
@@ -13,7 +21,7 @@ module Minder
                   :help_frame,
                   :search_frame,
                   :filter_frame,
-                  :message_frame,
+                  :tasks_frame,
                   :quick_add_frame
 
     attr_reader :database
@@ -36,7 +44,6 @@ module Minder
       pomodoro_runner.add_observer(self, :handle_event)
 
       self.scene = Scene.new
-      scene.setup
 
       options = { pomodoro_runner: pomodoro_runner, task_manager: task_manager  }
 
@@ -47,47 +54,18 @@ module Minder
       filter_frame.hide
       self.search_frame = SearchFrame.new(options)
       search_frame.hide
-      self.message_frame = MessageFrame.new(options)
+      self.tasks_frame = TasksFrame.new(options)
       self.quick_add_frame = QuickAddFrame.new(options)
       quick_add_frame.focus
 
       scene.frames << pomodoro_frame
-      scene.frames << message_frame
       scene.frames << help_frame
       scene.frames << filter_frame
       scene.frames << search_frame
       scene.frames << quick_add_frame
+      scene.frames << tasks_frame
 
-      scene.frames.each do |frame|
-        frame.add_observer(self, :handle_event)
-      end
-
-      # TODO: Eww, gross
-      scene.redraw
-      scene.redraw
-
-      old_dimensions = [Curses.lines, Curses.cols]
-      loop do
-        scene.frames.each do |frame|
-          next unless frame.focused?
-          frame.listen
-        end
-        pomodoro_runner.tick
-        pomodoro_frame.refresh
-        scene.focused_frame.set_cursor_position
-        scene.focused_frame.window_refresh
-
-        new_dimensions = [Curses.lines, Curses.cols]
-        if new_dimensions != old_dimensions
-          scene.redraw
-          scene.redraw
-          old_dimensions = new_dimensions
-        end
-
-        sleep(0.01)
-      end
-
-      scene.close
+      scene.setup
     end
 
     def pomodoro_runner
@@ -107,9 +85,9 @@ module Minder
 
       case event
       when :started_work
-        message_frame.minimize
+        tasks_frame.minimize
       when :completed_work
-        message_frame.unminimize
+        tasks_frame.unminimize
       when :continue
         pomodoro_runner.continue
       when :editor
@@ -136,19 +114,19 @@ module Minder
       when :select_first_task
         task_manager.select_first_task
       when :help
-        message_frame.hide
+        tasks_frame.hide
         help_frame.unhide
         scene.focus_frame(help_frame)
       when :hide_help
         help_frame.hide
-        message_frame.unhide
-        scene.focus_frame(message_frame)
+        tasks_frame.unhide
+        scene.focus_frame(tasks_frame)
       when :open_filter
         filter_frame.unhide
         scene.focus_frame(filter_frame)
       when :submit_filter
         filter_frame.hide if data[:text] == ''
-        scene.focus_frame(message_frame)
+        scene.focus_frame(tasks_frame)
       when :update_filter
         task_manager.filter(data[:text])
       when :search
@@ -157,7 +135,7 @@ module Minder
         scene.focus_frame(search_frame)
       when :submit_search
         search_frame.hide
-        scene.focus_frame(message_frame)
+        scene.focus_frame(tasks_frame)
         task_manager.search(data[:text])
         task_manager.select_search_result
       when :next_search
@@ -166,7 +144,7 @@ module Minder
         task_manager.previous_search
       when :escape_search
         search_frame.hide
-        scene.focus_frame(message_frame)
+        scene.focus_frame(tasks_frame)
       end
 
       scene.redraw

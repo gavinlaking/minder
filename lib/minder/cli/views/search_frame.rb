@@ -9,8 +9,24 @@ module Minder
       @search_string = ''
     end
 
+    interface 'search' do
+      border do
+        'C'
+      end
+      geometry do
+        height 5
+      end
+      cursor!
+      hide!
+      group 'main'
+    end
+
     def desired_height
       3
+    end
+
+    def view_name
+      'search'
     end
 
     def template

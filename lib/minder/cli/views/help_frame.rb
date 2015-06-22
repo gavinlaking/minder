@@ -2,6 +2,22 @@ require 'minder/cli/frame'
 
 module Minder
   class HelpFrame < Frame
+    interface 'help' do
+      border do
+        'C'
+      end
+      geometry do
+        height 5
+      end
+      cursor!
+      group 'main'
+      hide!
+    end
+
+    def view_name
+      'help'
+    end
+
     def template
       <<-TEXT
 Commands:   any key to dismiss
@@ -14,7 +30,7 @@ Commands:   any key to dismiss
 (G) go to bottom of list
 (gg) go to top of list
 (/) Search among tasks
-(m) minimize messages frame
+(m) minimize tasks frame
 (n) Next search result
 (N) Previous search result
 (?) to view this text

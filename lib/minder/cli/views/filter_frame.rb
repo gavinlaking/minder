@@ -9,6 +9,22 @@ module Minder
       @filter_string = ''
     end
 
+    def view_name
+      'filter'
+    end
+
+    interface 'filter' do
+      cursor!
+      border do
+        'C'
+      end
+      geometry do
+        height 5
+      end
+      group 'main'
+      hide!
+    end
+
     def desired_height
       3
     end

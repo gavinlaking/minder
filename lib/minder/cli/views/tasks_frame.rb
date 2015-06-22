@@ -2,9 +2,26 @@ require 'minder/cli/frame'
 require 'minder/cli/task_editor'
 
 module Minder
-  class MessageFrame < Frame
+  class TasksFrame < Frame
     attr_reader :current_line,
                 :task_editor
+
+    interface 'tasks' do
+      border do
+        'C'
+      end
+      geometry do
+        y { use('pomodoro').south }
+        yn { use('quick_add').north }
+      end
+      cursor!
+      group 'main'
+    end
+
+    keymap 'tasks' do
+      key(:up, 'k') { Vedeu.trigger(:_cursor_up_) }
+      key(:down, 'j') { Vedeu.trigger(:_cursor_down_) }
+    end
 
     def initialize(*)
       super
@@ -71,6 +88,10 @@ TEXT
         end
       end
       text
+    end
+
+    def view_name
+      'tasks'
     end
 
     def tasks_text_lines
