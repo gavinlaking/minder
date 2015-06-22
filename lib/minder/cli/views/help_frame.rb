@@ -2,16 +2,18 @@ require 'minder/cli/frame'
 
 module Minder
   class HelpFrame < Frame
-    interface 'help' do
-      border do
-        'C'
+    def setup
+      interface 'help' do
+        border do
+          'C'
+        end
+        geometry do
+          height 5
+        end
+        cursor!
+        group 'main'
+        hide!
       end
-      geometry do
-        height 5
-      end
-      cursor!
-      group 'main'
-      hide!
     end
 
     def view_name

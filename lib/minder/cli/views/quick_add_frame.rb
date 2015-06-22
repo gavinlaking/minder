@@ -9,16 +9,18 @@ module Minder
       self.input = ''
     end
 
-    interface 'quick_add' do
-      border do
-        'C'
+    def setup
+      interface 'quick_add' do
+        border do
+          'C'
+        end
+        geometry do
+          height 3
+          y Vedeu.height - 3
+        end
+        cursor!
+        group 'main'
       end
-      geometry do
-        height 3
-        y Vedeu.height - 3
-      end
-      cursor!
-      group 'main'
     end
 
     def view_name

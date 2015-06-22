@@ -43,7 +43,7 @@ module Minder
         view view_name do
           lines do
             lines_from_template.each do |l|
-              line l
+              line something
             end
           end
         end

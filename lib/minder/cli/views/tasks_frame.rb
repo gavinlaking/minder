@@ -6,21 +6,23 @@ module Minder
     attr_reader :current_line,
                 :task_editor
 
-    interface 'tasks' do
-      border do
-        'C'
+    def setup
+      interface 'tasks' do
+        border do
+          'C'
+        end
+        geometry do
+          y { use('pomodoro').south }
+          yn { use('quick_add').north }
+        end
+        cursor!
+        group 'main'
       end
-      geometry do
-        y { use('pomodoro').south }
-        yn { use('quick_add').north }
-      end
-      cursor!
-      group 'main'
-    end
 
-    keymap 'tasks' do
-      key(:up, 'k') { Vedeu.trigger(:_cursor_up_) }
-      key(:down, 'j') { Vedeu.trigger(:_cursor_down_) }
+      keymap 'tasks' do
+        key(:up, 'k') { Vedeu.trigger(:_cursor_up_) }
+        key(:down, 'j') { Vedeu.trigger(:_cursor_down_) }
+      end
     end
 
     def initialize(*)

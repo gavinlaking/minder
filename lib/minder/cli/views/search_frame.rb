@@ -9,16 +9,18 @@ module Minder
       @search_string = ''
     end
 
-    interface 'search' do
-      border do
-        'C'
+    def setup
+      interface 'search' do
+        border do
+          'C'
+        end
+        geometry do
+          height 5
+        end
+        cursor!
+        hide!
+        group 'main'
       end
-      geometry do
-        height 5
-      end
-      cursor!
-      hide!
-      group 'main'
     end
 
     def desired_height

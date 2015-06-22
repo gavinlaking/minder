@@ -56,7 +56,7 @@ module Minder
       search_frame.hide
       self.tasks_frame = TasksFrame.new(options)
       self.quick_add_frame = QuickAddFrame.new(options)
-      quick_add_frame.focus
+      #quick_add_frame.focus
 
       scene.frames << pomodoro_frame
       scene.frames << help_frame
