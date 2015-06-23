@@ -6,25 +6,6 @@ module Minder
     attr_reader :current_line,
                 :task_editor
 
-    def setup
-      interface 'tasks' do
-        border do
-          'C'
-        end
-        geometry do
-          y { use('pomodoro').south }
-          yn { use('quick_add').north }
-        end
-        cursor!
-        group 'main'
-      end
-
-      keymap 'tasks' do
-        key(:up, 'k') { Vedeu.trigger(:_cursor_up_) }
-        key(:down, 'j') { Vedeu.trigger(:_cursor_down_) }
-      end
-    end
-
     def initialize(*)
       super
       self.height = desired_height
@@ -108,6 +89,7 @@ TEXT
       return 3 if minimized?
 
       # TODO: figure out what this magic 3 number is
+      # Gav says: This is probably border top and bottom plus 1 line.
       header_text_lines.length + tasks_text_lines.length + 3
     end
 

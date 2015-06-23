@@ -4,8 +4,10 @@ require 'minder/tasks/task_manager'
 
 require 'ostruct'
 
-require 'minder/cli/setup'
-require 'minder/cli/scene'
+# require 'minder/cli/setup'
+require 'minder/config/configuration'
+require 'minder/cli/frames'
+
 require 'minder/cli/views/help_frame'
 require 'minder/cli/views/search_frame'
 require 'minder/cli/views/filter_frame'

@@ -13,20 +13,6 @@ module Minder
       'filter'
     end
 
-    def setup
-      interface 'filter' do
-        cursor!
-        border do
-          'C'
-        end
-        geometry do
-          height 5
-        end
-        group 'main'
-        hide!
-      end
-    end
-
     def desired_height
       3
     end

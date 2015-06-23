@@ -1,0 +1,9 @@
+<%- if object.minimized? -%>
+  Space to see tasks
+<%- elsif object.task_manager.tasks? -%>
+  <%= object.header_text + object.offset_tasks_text -%>
+<%- else -%>
+  What are you working on?
+
+  Press (e) to open editor.
+<%- end -%>

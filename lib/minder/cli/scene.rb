@@ -7,8 +7,8 @@ module Minder
     end
 
     def setup
-      frames.each(&:setup)
-      frames.each(&:show)
+      # frames.each(&:setup)
+      # frames.each(&:show)
 
       Vedeu.focus_by_name('pomodoro')
       Vedeu::Launcher.new().execute!
